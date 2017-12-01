@@ -1,78 +1,61 @@
 import React from 'react';
-import { StyleSheet, Text, TouchHighlight, Button,Alert, View, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, TouchHighlight, Button, Alert, View, TouchableHighlight } from 'react-native';
+import { TouchButton } from './main/TouchButton';
+import { NumberPanel } from './main/NumberPanel';
+import { OperationPanel } from './main/OperationPanel';
+import { ScreenPanel } from './main/ScreenPanel';
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      'number': "0",
+      'operator': "",
+      'preValue': "",
+    }
+    this.updateNumber = this.updateNumber.bind(this);
+    this.updateOperator = this.updateOperator.bind(this);
+  }
+  updateNumber(number) {
+    if (number == "AC") {
+      this.setState({
+        'number': "0",
+        'operator': "",
+        'preValue': ""
+      })
+    } else if (this.state.number == "0" || this.state.operator == "=") {
+      this.setState({ 'number': number, 'operator': "" });
+    }
+    else {
+      this.setState({ 'number': this.state.number + number });
+    }
+  }
+  updateOperator(operator) {
+    if (this.state.preValue == "0" && this.state.operator == "") {
+      this.setState({
+        'preValue': this.state.number + operator,
+        'operator': "",
+        'number': "0"
+      });
+    }
+    else if (operator == "=") {
+      this.setState({ 'number': eval(this.state.preValue + this.state.number), 'preValue': " ", 'operator': operator });
+    }
+    else {
+      this.setState({ 'preValue': this.state.preValue + this.state.number + operator, 'operator': "", 'number': "0" })
+    }
+  }
   render() {
     return (<View style={{ flex: 1 }}>
       <View style={{ flex: 1, backgroundColor: 'black', alignItems: 'center' }}>
         <Text style={{ flex: 1 }}>_</Text>
         <Text style={{ flex: 1, color: 'white' }} >Calculator</Text>
       </View>
-      <View style={{ flex: 2, backgroundColor: 'blue' }}>
-        <Text></Text></View>
-      <View style={{ flex: 3, backgroundColor: 'lightblue' }}></View>
+      <ScreenPanel result={this.state.number} oper={this.state.operator} preresult={this.state.preValue} />
       <View style={{ flex: 10, backgroundColor: 'lightgreen', flexDirection: 'row' }}>
-        <View style={{ flex: 3 }}>
-          <View style={{ flex: 1, flexDirection: 'row' }}>
-            <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(0,0,250,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed 1") }}>
-              <Text style={{ fontSize: 30 }}>1</Text>
-            </TouchableHighlight>
-            <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(0,0,250,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed 2") }}>
-              <Text style={{ fontSize: 30 }}>2</Text>
-            </TouchableHighlight>
-            <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(0,0,250,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed 3") }}>
-              <Text style={{ fontSize: 30 }}>3</Text>
-            </TouchableHighlight>
-          </View>
-          <View style={{ flex: 1, flexDirection: 'row' }}>
-            <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(0,0,250,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed 4") }}>
-              <Text style={{ fontSize: 30 }}>4</Text>
-            </TouchableHighlight>
-            <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(0,0,250,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed 5") }}>
-              <Text style={{ fontSize: 30 }}>5</Text>
-            </TouchableHighlight>
-            <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(0,0,250,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed 6") }}>
-              <Text style={{ fontSize: 30 }}>6</Text>
-            </TouchableHighlight>
-          </View>
-          <View style={{ flex: 1, flexDirection: 'row' }}>
-            <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(0,0,250,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed 7") }}>
-              <Text style={{ fontSize: 30 }}>7</Text>
-            </TouchableHighlight>
-            <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(0,0,250,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed 8") }}>
-              <Text style={{ fontSize: 30 }}>8</Text>
-            </TouchableHighlight>
-            <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(0,0,250,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed 9") }}>
-              <Text style={{ fontSize: 30 }}>9</Text>
-            </TouchableHighlight>
-          </View>
-          <View style={{ flex: 1, flexDirection: 'row' }}>
-            <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(0,0,250,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed AC") }}>
-              <Text style={{ fontSize: 30 }}>AC</Text>
-            </TouchableHighlight>
-            <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(0,0,250,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed 0") }}>
-              <Text style={{ fontSize: 30 }}>0</Text>
-            </TouchableHighlight>
-          </View>
-        </View>
-        <View style={{ flex: 1 }}>
-          <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(250,250,0,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed +") }}>
-            <Text style={{ fontSize: 30 }}>+</Text>
-          </TouchableHighlight>
-          <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(250,250,0,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed -") }}>
-            <Text style={{ fontSize: 30 }}>-</Text>
-          </TouchableHighlight>
-          <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(250,250,0,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed *") }}>
-            <Text style={{ fontSize: 30 }}>*</Text>
-          </TouchableHighlight>
-          <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(250,250,0,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed /") }}>
-            <Text style={{ fontSize: 30 }}>/</Text>
-          </TouchableHighlight>
-          <TouchableHighlight underlayColor="white" style={{ backgroundColor: 'rgba(0,0,0,0.4)', flex: 1, alignItems: 'flex-end', justifyContent: 'center', alignItems: 'center' }} onPress={() => { Alert.alert("You Pressed =") }}>
-            <Text style={{ fontSize: 30 }}>=</Text>
-          </TouchableHighlight>
+        <NumberPanel getNumber={this.updateNumber} />
+        <OperationPanel getOper={this.updateOperator} />
 
-        </View>
       </View>
     </View>
 
